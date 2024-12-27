@@ -10,7 +10,7 @@ public class BookLoan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private int id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
@@ -35,11 +35,11 @@ public class BookLoan {
         this.returnDate = returnDate;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

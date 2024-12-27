@@ -13,7 +13,7 @@ public class Book
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private int id;
+    private Integer id;
 
     @Column(name = "Title", nullable = false)
     private String title;
@@ -25,7 +25,7 @@ public class Book
     private LocalDate publicationDate;
 
     @Column(name = "Copiews_Available", nullable = false)
-    private int copiesAvailable;
+    private Integer copiesAvailable;
 
     @ManyToOne
     @JoinColumn(name = "genre_id", nullable = false)
@@ -35,7 +35,7 @@ public class Book
     @JoinTable(name = "book_author", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors;
 
-    @ManyToMany(mappedBy = "book")
+    @ManyToMany(mappedBy = "books")
     private Set<LibraryBranch> libraryBranches;
 
     @OneToMany(mappedBy = "book")
@@ -43,7 +43,7 @@ public class Book
 
     public Book() {}
 
-    public Book(String title, String isbn, LocalDate publicationDate, Genre genre, int copiesAvailable) {
+    public Book(String title, String isbn, LocalDate publicationDate, Genre genre, Integer copiesAvailable) {
         this.title = title;
         this.isbn = isbn;
         this.publicationDate = publicationDate;
@@ -55,11 +55,11 @@ public class Book
         this.libraryBranches = new HashSet<>();
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -95,11 +95,11 @@ public class Book
         this.publicationDate = publicationDate;
     }
 
-    public int getCopiesAvailable() {
+    public Integer getCopiesAvailable() {
         return copiesAvailable;
     }
 
-    public void setCopiesAvailable(int copiesAvailable) {
+    public void setCopiesAvailable(Integer copiesAvailable) {
         this.copiesAvailable = copiesAvailable;
     }
 

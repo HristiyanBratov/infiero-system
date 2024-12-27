@@ -11,7 +11,7 @@ public class LibraryBranch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private int id;
+    private Integer id;
 
     @Column(name = "Branch_Name", nullable = false, unique = true)
     private String branchName;
@@ -40,11 +40,11 @@ public class LibraryBranch {
         this.books = new HashSet<>();
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

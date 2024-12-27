@@ -11,7 +11,7 @@ public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private int id;
+    private Integer id;
 
     @Column(name = "First_Name", nullable = false)
     private String firstName;
@@ -22,7 +22,7 @@ public class Author {
     @Column(name = "Nationality")
     private String nationality;
 
-    @ManyToMany(mappedBy = "author")
+    @ManyToMany(mappedBy = "authors")
     private Set<Book> books;
 
     public Author() {}
@@ -35,11 +35,11 @@ public class Author {
         this.books = new HashSet<>();
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
