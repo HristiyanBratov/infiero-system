@@ -3,6 +3,8 @@ package com.project.backend_api.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "book_loans")
@@ -10,7 +12,7 @@ public class BookLoan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
@@ -20,26 +22,30 @@ public class BookLoan {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @OneToOne(mappedBy = "bookLoan")
+    private Fine fine;
+
     @Column(name = "Loan_Date", nullable = false)
     private LocalDate loanDate;
 
-    @Column(name = "Return_Date")
+    @Column(name = "Return_Date", nullable = false)
     private LocalDate returnDate;
 
     public BookLoan() {}
 
-    public BookLoan(Book book, Member member, LocalDate loanDate, LocalDate returnDate) {
+    public BookLoan(Book book, Member member, LocalDate loanDate, LocalDate returnDate, Fine fine) {
         this.book = book;
         this.member = member;
         this.loanDate = loanDate;
         this.returnDate = returnDate;
+        this.fine = fine;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -73,5 +79,13 @@ public class BookLoan {
 
     public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public Fine getFine() {
+        return fine;
+    }
+
+    public void setFine(Fine fine) {
+        this.fine = fine;
     }
 }

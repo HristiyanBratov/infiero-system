@@ -10,7 +10,7 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
@@ -23,6 +23,7 @@ public class Reservation {
     @Column(name = "Reservation_Date", nullable = false)
     private LocalDate reservationDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status", nullable = false)
     private Status status;
 
@@ -35,11 +36,11 @@ public class Reservation {
         this.status = status;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

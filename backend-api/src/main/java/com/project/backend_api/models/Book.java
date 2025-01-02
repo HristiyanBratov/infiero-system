@@ -13,7 +13,7 @@ public class Book
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Integer id;
+    private Long id;
 
     @Column(name = "Title", nullable = false)
     private String title;
@@ -21,10 +21,10 @@ public class Book
     @Column(name = "ISBN", nullable = false, unique = true, length = 13)
     private String isbn;
 
-    @Column(name = "Publication_Date", nullable = true)
+    @Column(name = "Publication_Date")
     private LocalDate publicationDate;
 
-    @Column(name = "Copiews_Available", nullable = false)
+    @Column(name = "Copies_Available", nullable = false)
     private Integer copiesAvailable;
 
     @ManyToOne
@@ -39,6 +39,9 @@ public class Book
     private Set<LibraryBranch> libraryBranches;
 
     @OneToMany(mappedBy = "book")
+    private Set<Reservation> reservations;
+
+    @OneToMany(mappedBy = "book")
     private Set<BookLoan> bookLoans;
 
     public Book() {}
@@ -51,15 +54,16 @@ public class Book
         this.copiesAvailable = copiesAvailable;
 
         this.authors = new HashSet<>();
-        this.bookLoans = new HashSet<>();
         this.libraryBranches = new HashSet<>();
+        this.reservations = new HashSet<>();
+        this.bookLoans = new HashSet<>();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -125,5 +129,13 @@ public class Book
 
     public void setLibraryBranches(Set<LibraryBranch> libraryBranches) {
         this.libraryBranches = libraryBranches;
+    }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }

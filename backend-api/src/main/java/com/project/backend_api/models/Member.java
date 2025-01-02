@@ -12,7 +12,7 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Integer id;
+    private Long id;
 
     @Column(name = "First_Name", nullable = false)
     private String firstName;
@@ -33,6 +33,12 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private Set<BookLoan> bookLoans;
 
+    @OneToMany(mappedBy = "member")
+    private Set<Reservation> reservations;
+
+    @OneToMany(mappedBy = "member")
+    private Set<Fine> fines;
+
     public Member() {}
 
     public Member(String firstName, String lastName, String email, Status memberStatus, LocalDate membershipDate) {
@@ -43,13 +49,15 @@ public class Member {
         this.membershipDate = membershipDate;
 
         this.bookLoans = new HashSet<>();
+        this.reservations = new HashSet<>();
+        this.fines = new HashSet<>();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -99,5 +107,21 @@ public class Member {
 
     public void setBookLoans(Set<BookLoan> bookLoans) {
         this.bookLoans = bookLoans;
+    }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
+    public Set<Fine> getFines() {
+        return fines;
+    }
+
+    public void setFines(Set<Fine> fines) {
+        this.fines = fines;
     }
 }
