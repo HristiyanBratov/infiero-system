@@ -1,5 +1,6 @@
 package com.project.backend_api.controllers;
 
+import com.project.backend_api.dto.BookDTO;
 import com.project.backend_api.models.Book;
 import com.project.backend_api.services.BookService;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class LibraryController {
 
     //Read All Books Details from DB
     @GetMapping()
-    public List<Book> getAllBookDetails(){
+    public List<BookDTO> getAllBookDetails(){
         return bookService.getAllBooks();
     }
 
