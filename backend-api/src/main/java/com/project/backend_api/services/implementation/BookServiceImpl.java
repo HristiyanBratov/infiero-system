@@ -39,13 +39,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String deleteBook(int bookId) {
+    public String deleteBook(Long bookId) {
         bookRepository.deleteById(bookId);
         return "Deleted successfully.";
     }
 
     @Override
-    public Book getBook(int bookId) {
+    public Book getBook(Long bookId) {
         return bookRepository.findById(bookId).get();
     }
 
@@ -56,4 +56,7 @@ public class BookServiceImpl implements BookService {
                 .map(bookDTOMapper)
                 .collect(Collectors.toList());
     }
+
+
+
 }

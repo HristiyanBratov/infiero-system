@@ -17,7 +17,7 @@ public class LibraryController {
 
     //Read Specific Book Details from DB
     @GetMapping("{bookId}")
-    public Book getBookDetails(@PathVariable("bookId") int bookId){
+    public Book getBookDetails(@PathVariable("bookId") Long bookId){
         return bookService.getBook(bookId);
     }
 
@@ -40,7 +40,7 @@ public class LibraryController {
     }
 
     @DeleteMapping
-    public String deleteBookDetails(@PathVariable("bookId") int bookId){
+    public String deleteBookDetails(@PathVariable("bookId") Long bookId){
         bookService.deleteBook(bookId);
         return "Book deleted successfully";
     }

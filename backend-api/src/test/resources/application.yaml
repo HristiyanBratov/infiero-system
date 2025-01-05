@@ -13,4 +13,6 @@ spring:
         show-sql: true
 
   #JPA настройки
-jpa.hibernate.ddl-autp: create-drop
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

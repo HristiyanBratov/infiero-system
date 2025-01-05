@@ -10,7 +10,7 @@ public class Genre {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "Name", nullable = false, unique = true)
+    @Column(name = "Name")
     private String name;
 
     public Genre() {}
