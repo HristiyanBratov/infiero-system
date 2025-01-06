@@ -10,9 +10,7 @@ import com.project.backend_api.services.implementation.BookServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
@@ -24,8 +22,7 @@ import java.util.stream.Collectors;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class BookServiceImplTest {
 
@@ -75,7 +72,13 @@ public class BookServiceImplTest {
     }
     @Test
     void testDeleteBook() {
+        mock(Book.class);
+        mock(BookRepository.class, Mockito.CALLS_REAL_METHODS);
 
+        doAnswer(Answers.CALLS_REAL_METHODS).
+                when(bookRepository).deleteById(any());
+
+        assertThat(bookService.deleteBook(1L)).isEqualTo("Deleted successfully.");
     }
     @Test
     void testGetBook() {
