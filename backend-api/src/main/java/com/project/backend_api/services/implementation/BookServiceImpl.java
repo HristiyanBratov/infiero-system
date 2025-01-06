@@ -10,6 +10,9 @@ import com.project.backend_api.models.LibraryBranch;
 import com.project.backend_api.models.Reservation;
 import com.project.backend_api.repositories.BookRepository;
 import com.project.backend_api.services.BookService;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,26 +30,35 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String createBook(Book book) {
+    public ResponseEntity<String> createBook(Book book) {
         bookRepository.save(book);
-        return "Book created successfully.";
+        return ResponseEntity.status(HttpStatus.CREATED).body("Book created successfully.");
     }
 
     @Override
-    public String updateBook(Book book) {
+    public ResponseEntity<String> updateBook(Book book) {
+        if(!bookRepository.existsById(book.getId())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found for update.");
+        }
+
         bookRepository.save(book);
-        return "Book created successfully.";
+        return ResponseEntity.ok("Book updated successfully.");
     }
 
     @Override
-    public String deleteBook(Long bookId) {
+    public ResponseEntity<String> deleteBook(Long bookId) {
+        if(!bookRepository.existsById(bookId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found to be deleted.");
+        }
+
         bookRepository.deleteById(bookId);
-        return "Deleted successfully.";
+        return ResponseEntity.ok("Book deleted successfully.");
     }
 
     @Override
-    public Book getBook(Long bookId) {
-        return bookRepository.findById(bookId).get();
+    public BookDTO getBook(Long bookId) {
+        return bookRepository.findById(bookId).map(bookDTOMapper).
+                orElseThrow(() -> new EntityNotFoundException("Book with id: " + bookId + " not found."));
     }
 
     @Override
@@ -56,7 +68,4 @@ public class BookServiceImpl implements BookService {
                 .map(bookDTOMapper)
                 .collect(Collectors.toList());
     }
-
-
-
 }

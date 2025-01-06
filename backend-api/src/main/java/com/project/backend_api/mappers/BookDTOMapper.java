@@ -30,7 +30,8 @@ public class BookDTOMapper implements Function<Book, BookDTO> {
                        .collect(Collectors.toList()),
                 book.getReservations()
                         .stream()
-                        .map(this::mapToReservationDTO).collect(Collectors.toList())
+                        .map(this::mapToReservationDTO).
+                        collect(Collectors.toList())
         );
     }
 

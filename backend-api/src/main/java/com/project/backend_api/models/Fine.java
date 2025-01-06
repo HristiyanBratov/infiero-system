@@ -22,9 +22,9 @@ public class Fine {
     @Column(name = "Fine_Status", nullable = false)
     private Status fineStatus;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    private Member member;*/
 
     @OneToOne
     @JoinColumn(name = "book_load_id", nullable = false, unique = true)
@@ -32,11 +32,11 @@ public class Fine {
 
     public Fine() {}
 
-    public Fine(Double amount, LocalDate dueDate, Status fineStatus, Member member, BookLoan bookLoan) {
+    public Fine(Double amount, LocalDate dueDate, Status fineStatus, /*Member member,*/ BookLoan bookLoan) {
         this.amount = amount;
         this.dueDate = dueDate;
         this.fineStatus = fineStatus;
-        this.member = member;
+        //this.member = member;
         this.bookLoan = bookLoan;
     }
 
@@ -72,13 +72,13 @@ public class Fine {
         this.fineStatus = fineStatus;
     }
 
-    public Member getMember() {
+    /*public Member getMember() {
         return member;
     }
 
     public void setMember(Member member) {
         this.member = member;
-    }
+    }*/
 
     public BookLoan getBookLoan() {
         return bookLoan;
