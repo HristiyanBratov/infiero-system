@@ -33,11 +33,11 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private Set<BookLoan> bookLoans;
 
-    /*@OneToMany(mappedBy = "member")
-    private Set<Reservation> reservations;*/
+    @OneToMany(mappedBy = "member")
+    private Set<Reservation> reservations;
 
-    /*@OneToMany(mappedBy = "member")
-    private Set<Fine> fines;*/
+    @OneToMany(mappedBy = "member")
+    private Set<Fine> fines;
 
     public Member() {}
 
@@ -49,8 +49,8 @@ public class Member {
         this.membershipDate = membershipDate;
 
         this.bookLoans = new HashSet<>();
-        //this.reservations = new HashSet<>();
-        //this.fines = new HashSet<>();
+        this.reservations = new HashSet<>();
+        this.fines = new HashSet<>();
     }
 
     public Long getId() {
@@ -109,19 +109,19 @@ public class Member {
         this.bookLoans = bookLoans;
     }
 
-    /*public Set<Reservation> getReservations() {
+    public Set<Reservation> getReservations() {
         return reservations;
     }
 
     public void setReservations(Set<Reservation> reservations) {
         this.reservations = reservations;
-    }*/
+    }
 
-    /*public Set<Fine> getFines() {
+    public Set<Fine> getFines() {
         return fines;
     }
 
     public void setFines(Set<Fine> fines) {
         this.fines = fines;
-    }*/
+    }
 }

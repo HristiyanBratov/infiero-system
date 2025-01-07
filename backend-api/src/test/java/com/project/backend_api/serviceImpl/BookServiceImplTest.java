@@ -85,7 +85,7 @@ public class BookServiceImplTest {
         mock(Book.class);
         mock(BookRepository.class);
         when(bookRepository.findById(32123L)).thenReturn(Optional.ofNullable(book));
-        assertThat(bookService.getBook(32123L).getTitle())
+        assertThat(bookService.getBook(32123L))
                 .isEqualTo(book.getTitle());
 
     }

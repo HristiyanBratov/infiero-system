@@ -23,17 +23,17 @@ public class Reservation {
     @Column(name = "Reservation_Date", nullable = false)
     private LocalDate reservationDate;
 
-    @Enumerated(EnumType.STRING)
+    /*@Enumerated(EnumType.STRING)
     @Column(name = "Status", nullable = false)
-    private Status status;
+    private Status status;*/
 
     public Reservation() {}
 
-    public Reservation(Member member, Book book, LocalDate reservationDate, Status status) {
+    public Reservation(Member member, Book book, LocalDate reservationDate/*, Status status*/) {
         this.member = member;
         this.book = book;
         this.reservationDate = reservationDate;
-        this.status = status;
+        //this.status = status;
     }
 
     public Long getId() {
@@ -68,11 +68,11 @@ public class Reservation {
         this.reservationDate = reservationDate;
     }
 
-    public Status getStatus() {
+    /*public Status getStatus() {
         return status;
     }
 
     public void setStatus(Status status) {
         this.status = status;
-    }
+    }*/
 }

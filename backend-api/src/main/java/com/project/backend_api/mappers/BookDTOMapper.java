@@ -70,8 +70,8 @@ public class BookDTOMapper implements Function<Book, BookDTO> {
         return new ReservationDTO(
                 null,
                 mapToMemberDTO(reservation.getMember()),
-                null,
-                reservation.getStatus()
+                null
+                //reservation.getStatus()
         );
     }
 
