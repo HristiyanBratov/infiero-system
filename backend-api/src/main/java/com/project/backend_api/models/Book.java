@@ -1,6 +1,8 @@
 package com.project.backend_api.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -19,12 +21,14 @@ public class Book
     private String title;
 
     @Column(name = "ISBN", nullable = false, unique = true, length = 13)
+
     private String isbn;
 
     @Column(name = "Publication_Date")
     private LocalDate publicationDate;
 
     @Column(name = "Copies_Available", nullable = false)
+
     private Integer copiesAvailable;
 
     @ManyToOne
