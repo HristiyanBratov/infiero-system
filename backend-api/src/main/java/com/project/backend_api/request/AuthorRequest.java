@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Set;
 
-public class CreateAuthorRequest {
+public class AuthorRequest {
 
     @Valid
     private String firstName;
@@ -15,6 +15,7 @@ public class CreateAuthorRequest {
     private String lastName;
     private String nationality;
     private Set<Long> bookIds;
+
 
     public String getFirstName() {
         return firstName;

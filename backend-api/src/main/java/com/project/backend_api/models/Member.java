@@ -21,7 +21,6 @@ public class Member {
     @Column(name = "Last_Name", nullable = false)
     private String lastName;
 
-
     @Column(name = "Email", unique = true, nullable = false)
     private String email;
 

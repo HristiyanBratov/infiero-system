@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookDTOMapper implements Function<Book, BookDTO> {
+
     @Override
     public BookDTO apply(Book book) {
         return new BookDTO(

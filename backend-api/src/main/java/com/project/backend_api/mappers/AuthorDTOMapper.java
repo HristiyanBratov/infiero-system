@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class AuthorDTOMapper implements Function<Author, AuthorDTO> {
+
     @Override
     public AuthorDTO apply(Author author) {
         return new AuthorDTO(

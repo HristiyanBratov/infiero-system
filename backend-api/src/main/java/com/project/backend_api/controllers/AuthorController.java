@@ -1,11 +1,7 @@
 package com.project.backend_api.controllers;
 
 import com.project.backend_api.dto.AuthorDTO;
-import com.project.backend_api.dto.BookDTO;
-import com.project.backend_api.models.Author;
-import com.project.backend_api.models.Book;
-import com.project.backend_api.request.CreateAuthorRequest;
-import com.project.backend_api.request.CreateMemberRequest;
+import com.project.backend_api.request.AuthorRequest;
 import com.project.backend_api.services.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,6 +28,20 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
+    @PostMapping
+    @Operation(summary = "Create a author", description = "Creates an author with the given details")
+    public ResponseEntity<String> createAuthor(@Valid @RequestBody AuthorRequest authorRequest) {
+        authorService.createAuthor(authorRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Author created successfully.");
+    }
+
+    @PutMapping
+    @Operation(summary = "Update an author", description = "Updates the information about a given author")
+    public ResponseEntity<String> updateAuthor(@RequestParam Long authorId, @RequestBody AuthorRequest authorRequest) {
+        authorService.saveAuthor(authorId, authorRequest);
+        return ResponseEntity.ok("Author updated successfully");
+    }
+
     @GetMapping("{authorId}")
     @Operation(summary = "Searches an author by id", description = "Returns an author.")
     @ApiResponses({
@@ -47,28 +57,12 @@ public class AuthorController {
         return authorService.getAllAuthors();
     }
 
-    @PostMapping
-    @Operation(summary = "Create a author", description = "Creates an author with the given details")
-    public ResponseEntity<String> createAuthor(@Valid @RequestBody CreateAuthorRequest createAuthorRequest) {
-        authorService.createAuthor(createAuthorRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Author created successfully.");
-    }
-
-    @PutMapping
-    @Operation(summary = "Update an author", description = "Updates the information about a given author")
-    public ResponseEntity<String> updateAuthor(@RequestParam Long authorId, @RequestBody CreateAuthorRequest createAuthorRequest) {
-        authorService.saveAuthor(authorId, createAuthorRequest);
-        return ResponseEntity.ok("Author updated successfully");
-    }
-
     @DeleteMapping("{authorId}")
     @Operation(summary = "Delete an author", description = "Deletes an author by the given id")
     public ResponseEntity<String> deleteAuthor(@PathVariable("authorId") Long authorId) {
         authorService.deleteAuthorById(authorId);
         return ResponseEntity.ok("Author deleted successfully");
     }
-
-
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

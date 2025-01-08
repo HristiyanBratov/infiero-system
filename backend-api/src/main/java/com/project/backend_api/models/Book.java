@@ -2,7 +2,6 @@ package com.project.backend_api.models;
 
 import jakarta.persistence.*;
 
-
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;

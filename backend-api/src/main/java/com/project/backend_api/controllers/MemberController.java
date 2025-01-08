@@ -1,11 +1,7 @@
 package com.project.backend_api.controllers;
 
-
-import com.project.backend_api.dto.AuthorDTO;
 import com.project.backend_api.dto.MemberDTO;
-import com.project.backend_api.models.Author;
-import com.project.backend_api.request.CreateAuthorRequest;
-import com.project.backend_api.request.CreateMemberRequest;
+import com.project.backend_api.request.MemberRequest;
 import com.project.backend_api.services.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,7 +28,27 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping("{memberId}")
+    @PostMapping
+    @Operation(summary = "Create a member", description = "Creates a member with the given details")
+    public ResponseEntity<String> createMember(@Valid @RequestBody MemberRequest request) {
+        memberService.createMember(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Member created successfully.");
+    }
+
+    @PutMapping
+    @Operation(summary = "Update a member", description = "Updates the information about a given member")
+    public ResponseEntity<String> updateMember(@RequestParam Long memberId, @RequestBody MemberRequest memberRequest) {
+        memberService.updateMember(memberId, memberRequest);
+        return ResponseEntity.ok("Member updated successfully.");
+    }
+
+    @GetMapping("email")
+    @Operation(summary = "Get member by an email", description = "Returns a member with existing email")
+    public MemberDTO getMemberByEmail(@RequestParam String email) {
+        return memberService.getMemberByEmail(email);
+    }
+
+    @GetMapping("id/{memberId}")
     @Operation(summary = "Searches an member by id", description = "Returns an member.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "member is in the system"),
@@ -47,36 +63,12 @@ public class MemberController {
         return memberService.getAllMembers();
     }
 
-
-    @GetMapping("{email}")
-    @Operation(summary = "Get member by an email", description = "Returns a member with existing email")
-    public ResponseEntity<String> getMemberByEmail(@RequestParam String email) {
-        memberService.getMemberByEmail(email);
-        return ResponseEntity.ok("Member is found successfully");
-    }
-
-    @PostMapping
-    @Operation(summary = "Create a member", description = "Creates a member with the given details")
-    public ResponseEntity<String> createMember(@Valid @RequestBody CreateMemberRequest createMemberRequest) {
-        memberService.createMember(createMemberRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Member created successfully.");
-    }
-
-    @PutMapping
-    @Operation(summary = "Update a member", description = "Updates the information about a given member")
-    public ResponseEntity<String> updateMember(@RequestParam Long memberId, @RequestBody CreateMemberRequest createMemberRequest) {
-        memberService.updateMember(memberId, createMemberRequest);
-        return ResponseEntity.ok("Member updated successfully.");
-    }
-
     @DeleteMapping("{memberId}")
     @Operation(summary = "Delete a member", description = "Deletes a member by the given id")
     public ResponseEntity<String> deleteMember(@PathVariable("memberId") Long memberId) {
         memberService.deleteMember(memberId);
         return ResponseEntity.ok("Member deleted successfully.");
     }
-
-
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

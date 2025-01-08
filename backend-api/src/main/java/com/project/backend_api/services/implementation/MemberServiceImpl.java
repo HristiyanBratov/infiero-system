@@ -4,19 +4,14 @@ import com.project.backend_api.dto.MemberDTO;
 import com.project.backend_api.mappers.MemberDTOMapper;
 import com.project.backend_api.models.*;
 import com.project.backend_api.repositories.*;
-import com.project.backend_api.request.CreateMemberRequest;
+import com.project.backend_api.request.MemberRequest;
 import com.project.backend_api.services.MemberService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.constraints.Email;
-import org.hibernate.query.results.implicit.ImplicitFetchBuilderDiscriminatedAssociation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +21,6 @@ public class MemberServiceImpl implements MemberService {
     private final MemberDTOMapper memberDTOMapper;
     private final ReservationRepository reservationRepository;
 
-
     private MemberServiceImpl(MemberRepository memberRepository, MemberDTOMapper memberDTOMapper, ReservationRepository reservationRepository) {
         this.memberRepository = memberRepository;
         this.memberDTOMapper = memberDTOMapper;
@@ -34,8 +28,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void createMember(CreateMemberRequest request) {
-        Set<Reservation> reservations = reservationRepository.findAllById(request.getReservationsId()).stream().collect(Collectors.toSet());
+    public void createMember(MemberRequest request) {
+        Set<Reservation> reservations = new HashSet<>(reservationRepository.findAllById(request.getReservationsId()));
+        Status status = Status.valueOf(request.getStatus());
 
         if (reservations.isEmpty()) {
             throw new IllegalArgumentException("At least one reservaion is required");
@@ -46,16 +41,16 @@ public class MemberServiceImpl implements MemberService {
         member.setLastName(request.getLastName());
         member.setEmail(request.getEmail());
         member.setReservations(reservations);
-        member.getMembershipDate(request.getMembershipDate());
-
+        member.setMembershipDate(request.getMembershipDate());
+        member.setMemberStatus(status);
 
         memberRepository.save(member);
-
     }
 
     @Override
-    public void updateMember(Long memberId, CreateMemberRequest request) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("Member with ID " + memberId + " not found"));
+    public void updateMember(Long memberId, MemberRequest request) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Member with ID " + memberId + " not found"));
 
         if (request.getFirstName() != null) {
             member.setFirstName(request.getFirstName());
@@ -72,6 +67,22 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
+    @Override
+    public MemberDTO getMemberById(Long memberId) {
+        return memberRepository.findById(memberId).map(memberDTOMapper)
+                .orElseThrow(() -> new EntityNotFoundException("Member with id: " + memberId + " not found."));
+    }
+
+    @Override
+    public MemberDTO getMemberByEmail(String email) {
+        return memberRepository.findMemberByEmail(email).map(memberDTOMapper)
+                .orElseThrow(() -> new EntityNotFoundException("Member with email: " + email + " not found."));
+    }
+
+    @Override
+    public List<MemberDTO> getAllMembers() {
+        return memberRepository.findAll().stream().map(memberDTOMapper).collect(Collectors.toList());
+    }
 
     @Override
     public ResponseEntity<String> deleteMember(Long memberId) {
@@ -80,25 +91,5 @@ public class MemberServiceImpl implements MemberService {
         }
         memberRepository.deleteById(memberId);
         return ResponseEntity.ok("Member deleted successfully.");
-    }
-
-    @Override
-    public MemberDTO getMemberById(Long memberId) {
-        return memberRepository.findById(memberId).map(memberDTOMapper).orElseThrow(() -> new EntityNotFoundException("Member with id: " + memberId + " not found."));
-    }
-
-    @Override
-    public Optional<MemberDTO> getMemberByEmail(String email) {
-        try {
-            return memberRepository.findByEmail(email).map(memberDTOMapper);
-        } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("Member with email: " + email + " not found.");
-        }
-
-    }
-
-    @Override
-    public List<MemberDTO> getAllMembers() {
-        return memberRepository.findAll().stream().map(memberDTOMapper).collect(Collectors.toList());
     }
 }

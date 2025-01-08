@@ -4,10 +4,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-public class CreateMemberRequest {
+public class MemberRequest {
     @Valid
     @NotNull(message = "Member first name is mandatory!")
     @NotBlank(message = "Member first name is mandatory!")
@@ -17,7 +17,8 @@ public class CreateMemberRequest {
     private String lastName;
     private String email;
     private List<Long> reservationsId;
-    private Date membershipDate;
+    private LocalDate membershipDate;
+    private String status;
 
 
     public String getFirstName() {
@@ -44,7 +45,6 @@ public class CreateMemberRequest {
         this.email = email;
     }
 
-
     public List<Long> getReservationsId() {
         return reservationsId;
     }
@@ -53,11 +53,19 @@ public class CreateMemberRequest {
         this.reservationsId = reservationsId;
     }
 
-    public Date getMembershipDate() {
+    public LocalDate getMembershipDate() {
         return membershipDate;
     }
 
-    public void setMembershipDate(Date membershipDate) {
+    public void setMembershipDate(LocalDate membershipDate) {
         this.membershipDate = membershipDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

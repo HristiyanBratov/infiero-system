@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Set;
 
-public class CreateLibraryBranchRequest {
+public class LibraryBranchRequest {
     @Valid
     @NotNull(message = "Library branch name is mandatory!")
     @NotBlank(message = "Library branch name is mandatory!")

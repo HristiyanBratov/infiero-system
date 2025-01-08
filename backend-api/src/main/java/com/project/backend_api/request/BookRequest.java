@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Set;
 
-public class CreateBookRequest {
+public class BookRequest {
 
     @Valid
     @NotNull(message = "Book title is mandatory")
@@ -20,7 +20,6 @@ public class CreateBookRequest {
     private Integer copiesAvailable;
     private Long genreId;
     private Set<Long> authorIds;
-
 
 
     public String getTitle() {

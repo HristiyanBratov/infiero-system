@@ -1,21 +1,18 @@
 package com.project.backend_api.services.implementation;
 
-import com.project.backend_api.dto.AuthorDTO;
 import com.project.backend_api.dto.BookDTO;
-import com.project.backend_api.dto.LibraryBranchDTO;
 import com.project.backend_api.mappers.BookDTOMapper;
 import com.project.backend_api.models.*;
 import com.project.backend_api.repositories.AuthorRepository;
 import com.project.backend_api.repositories.BookRepository;
 import com.project.backend_api.repositories.GenreRepository;
-import com.project.backend_api.request.CreateBookRequest;
+import com.project.backend_api.request.BookRequest;
 import com.project.backend_api.services.BookService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,17 +32,14 @@ public class BookServiceImpl implements BookService {
         this.genreRepository = genreRepository;
     }
 
-
     @Override
-    public void createBook(CreateBookRequest request) {
+    public void createBook(BookRequest request) {
         Genre genre = genreRepository.findById(request.getGenreId()).orElseThrow(() -> new IllegalArgumentException("Invalid genre ID"));
-
         Set<Author> authors = authorRepository.findAllById(request.getAuthorIds()).stream().collect(Collectors.toSet());
 
         if (authors.isEmpty()) {
             throw new IllegalArgumentException("At least one valid author is required");
         }
-
 
         Book book = new Book();
         book.setTitle(request.getTitle());
@@ -55,14 +49,11 @@ public class BookServiceImpl implements BookService {
         book.setGenre(genre);
         book.setAuthors(authors);
 
-
         bookRepository.save(book);
     }
 
-
     @Override
-    public void updateBook(Long bookId, CreateBookRequest request) {
-
+    public void updateBook(Long bookId, BookRequest request) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("Book with ID " + bookId + " not found"));
 
         if (request.getTitle() != null) {
@@ -81,12 +72,10 @@ public class BookServiceImpl implements BookService {
             book.setCopiesAvailable(request.getCopiesAvailable());
         }
 
-
         if (request.getGenreId() != null) {
             Genre genre = genreRepository.findById(request.getGenreId()).orElseThrow(() -> new IllegalArgumentException("Invalid genre ID"));
             book.setGenre(genre);
         }
-
 
         if (request.getAuthorIds() != null && !request.getAuthorIds().isEmpty()) {
             Set<Author> authors = authorRepository.findAllById(request.getAuthorIds()).stream().collect(Collectors.toSet());
@@ -98,8 +87,31 @@ public class BookServiceImpl implements BookService {
             book.setAuthors(authors);
         }
 
-
         bookRepository.save(book);
+    }
+
+    @Override
+    public BookDTO getBook(Long bookId) {
+        return bookRepository.findById(bookId).map(bookDTOMapper).
+                orElseThrow(() -> new EntityNotFoundException("Book with id: " + bookId + " not found."));
+    }
+
+    @Override
+    public BookDTO getBookByIsbn(String isbn) {
+        return bookRepository.findBookByIsbn(isbn).map(bookDTOMapper).
+                orElseThrow(() -> new EntityNotFoundException("Book with isbn: " + isbn + " not found."));
+    }
+
+    @Override
+    public List<BookDTO> getBooksByGenre(String genre) {
+        return bookRepository.findBooksByGenreName(genre).
+                stream().map(bookDTOMapper).
+                collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDTO> getAllBooks() {
+        return bookRepository.findAll().stream().map(bookDTOMapper).collect(Collectors.toList());
     }
 
     @Override
@@ -110,15 +122,5 @@ public class BookServiceImpl implements BookService {
 
         bookRepository.deleteById(bookId);
         return ResponseEntity.ok("Book deleted successfully.");
-    }
-
-    @Override
-    public BookDTO getBook(Long bookId) {
-        return bookRepository.findById(bookId).map(bookDTOMapper).orElseThrow(() -> new EntityNotFoundException("Book with id: " + bookId + " not found."));
-    }
-
-    @Override
-    public List<BookDTO> getAllBooks() {
-        return bookRepository.findAll().stream().map(bookDTOMapper).collect(Collectors.toList());
     }
 }

@@ -1,20 +1,16 @@
 package com.project.backend_api.services;
 
-import com.project.backend_api.dto.BookDTO;
 import com.project.backend_api.dto.MemberDTO;
-import com.project.backend_api.request.CreateBookRequest;
-import com.project.backend_api.request.CreateMemberRequest;
+import com.project.backend_api.request.MemberRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface MemberService {
-    public void createMember(CreateMemberRequest request);
-    public void updateMember(Long id ,CreateMemberRequest request);
-    public ResponseEntity<String> deleteMember(Long memberId);
+    public void createMember(MemberRequest request);
+    public void updateMember(Long id , MemberRequest request);
     public MemberDTO getMemberById(Long memberId);
-    public Optional<MemberDTO>  getMemberByEmail(String email);
+    public MemberDTO  getMemberByEmail(String email);
     public List<MemberDTO> getAllMembers();
-
+    public ResponseEntity<String> deleteMember(Long memberId);
 }

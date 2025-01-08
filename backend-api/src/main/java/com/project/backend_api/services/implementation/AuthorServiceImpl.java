@@ -4,17 +4,16 @@ import com.project.backend_api.dto.AuthorDTO;
 import com.project.backend_api.mappers.AuthorDTOMapper;
 import com.project.backend_api.models.Author;
 import com.project.backend_api.models.Book;
-import com.project.backend_api.models.Genre;
 import com.project.backend_api.repositories.AuthorRepository;
 import com.project.backend_api.repositories.BookRepository;
-import com.project.backend_api.request.CreateAuthorRequest;
-import com.project.backend_api.request.CreateBookRequest;
+import com.project.backend_api.request.AuthorRequest;
 import com.project.backend_api.services.AuthorService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,9 +32,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void createAuthor(CreateAuthorRequest request) {
-        Set<Book> books = bookRepository.findAllById(request.getBookIds())
-                .stream().collect(Collectors.toSet());
+    public void createAuthor(AuthorRequest request) {
+        Set<Book> books = new HashSet<>(bookRepository.findAllById(request.getBookIds()));
 
         if (books.isEmpty()) {
             throw new IllegalArgumentException("At least one valid book is required");
@@ -47,14 +45,11 @@ public class AuthorServiceImpl implements AuthorService {
         author.setNationality(request.getNationality());
         author.setBooks(books);
 
-
         authorRepository.save(author);
     }
 
-
     @Override
-    public ResponseEntity<String> saveAuthor(Long authorId, CreateAuthorRequest request) {
-
+    public void saveAuthor(Long authorId, AuthorRequest request) {
         Author author = authorRepository.findById(authorId)
                 .orElseThrow(() -> new IllegalArgumentException("Author with ID " + authorId + " not found"));
 
@@ -70,19 +65,17 @@ public class AuthorServiceImpl implements AuthorService {
             author.setNationality(request.getNationality());
         }
 
-        authorRepository.save(author);
-        return ResponseEntity.ok("Author with ID " + authorId + " updated successfully");
+        if (request.getBookIds() != null && !request.getBookIds().isEmpty()) {
+            Set<Book> books = new HashSet<>(bookRepository.findAllById(request.getBookIds()));
 
-    }
+            if (books.isEmpty()) {
+                throw new IllegalArgumentException("At least one valid book is required");
+            }
 
-    @Override
-    public ResponseEntity<String> deleteAuthorById(Long authorId) {
-        if (!authorRepository.existsById(authorId)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Author not found for delete.");
+            author.setBooks(books);
         }
 
-        authorRepository.deleteById(authorId);
-        return ResponseEntity.ok("Author deleted successfully.");
+        authorRepository.save(author);
     }
 
     @Override
@@ -97,5 +90,15 @@ public class AuthorServiceImpl implements AuthorService {
                 .stream()
                 .map(authorDTOMapper)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ResponseEntity<String> deleteAuthorById(Long authorId) {
+        if (!authorRepository.existsById(authorId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Author not found for delete.");
+        }
+
+        authorRepository.deleteById(authorId);
+        return ResponseEntity.ok("Author deleted successfully.");
     }
 }
