@@ -9,12 +9,17 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Tag(name = "Books", description = "Endpoints for operations involving books")
@@ -43,7 +48,7 @@ public class BookController {
 
     @PostMapping
     @Operation(summary = "Create a book", description = "Creates a book with the given details")
-    public ResponseEntity<String> createBook(@RequestBody CreateBookRequest request) {
+    public ResponseEntity<String> createBook(@Valid  @RequestBody CreateBookRequest request) {
         bookService.createBook(request);
         return ResponseEntity.status(HttpStatus.CREATED).body("Book created successfully");
     }
@@ -61,5 +66,20 @@ public class BookController {
     public ResponseEntity<String> deleteBookDetails(@PathVariable("bookId") Long bookId) {
         bookService.deleteBook(bookId);
         return ResponseEntity.ok("Book deleted successfully");
+    }
+
+
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+
+        return errors;
     }
 }

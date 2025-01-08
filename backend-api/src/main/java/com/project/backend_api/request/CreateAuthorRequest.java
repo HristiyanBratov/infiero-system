@@ -1,9 +1,17 @@
 package com.project.backend_api.request;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Set;
 
 public class CreateAuthorRequest {
+
+    @Valid
     private String firstName;
+    @NotNull(message = "Author's last name is mandatory!")
+    @NotBlank(message = "Author's last name is mandatory!")
     private String lastName;
     private String nationality;
     private Set<Long> bookIds;

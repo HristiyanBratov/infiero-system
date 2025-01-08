@@ -1,8 +1,7 @@
 package com.project.backend_api.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
+
 
 import java.time.LocalDate;
 import java.util.HashSet;
