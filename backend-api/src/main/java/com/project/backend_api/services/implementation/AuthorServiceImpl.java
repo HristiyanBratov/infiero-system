@@ -33,8 +33,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void createAuthor (CreateAuthorRequest request) {
-
+    public void createAuthor(CreateAuthorRequest request) {
         Set<Book> books = bookRepository.findAllById(request.getBookIds())
                 .stream().collect(Collectors.toSet());
 
@@ -52,19 +51,33 @@ public class AuthorServiceImpl implements AuthorService {
         authorRepository.save(author);
     }
 
+
     @Override
-    public ResponseEntity<String> saveAuthor(Author author) {
-        if(!authorRepository.existsById(author.getId())) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Author not found for update.");
+    public ResponseEntity<String> saveAuthor(Long authorId, CreateAuthorRequest request) {
+
+        Author author = authorRepository.findById(authorId)
+                .orElseThrow(() -> new IllegalArgumentException("Author with ID " + authorId + " not found"));
+
+        if (request.getFirstName() != null) {
+            author.setFirstName(request.getFirstName());
+        }
+
+        if (request.getLastName() != null) {
+            author.setLastName(request.getLastName());
+        }
+
+        if (request.getNationality() != null) {
+            author.setNationality(request.getNationality());
         }
 
         authorRepository.save(author);
-        return ResponseEntity.ok("Author updated successfully.");
+        return ResponseEntity.ok("Author with ID " + authorId + " updated successfully");
+
     }
 
     @Override
     public ResponseEntity<String> deleteAuthorById(Long authorId) {
-        if(!authorRepository.existsById(authorId)) {
+        if (!authorRepository.existsById(authorId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Author not found for delete.");
         }
 

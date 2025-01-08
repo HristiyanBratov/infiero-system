@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface AuthorService {
     public void createAuthor(CreateAuthorRequest request);
-    public ResponseEntity<String> saveAuthor(Author author);
+    public ResponseEntity<String> saveAuthor(Long authorId, CreateAuthorRequest request);
     public ResponseEntity<String> deleteAuthorById(Long authorId);
     public AuthorDTO getAuthorById(Long authorId);
     public List<AuthorDTO> getAllAuthors();

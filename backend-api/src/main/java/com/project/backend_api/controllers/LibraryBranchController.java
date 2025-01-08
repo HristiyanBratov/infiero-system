@@ -27,37 +27,37 @@ public class LibraryBranchController {
     }
 
     @GetMapping("/search")
-    @Operation(summary = "Searches book by name", description = "Returns a library branch.")
+    @Operation(summary = "Searches book by name", description = "Returns a library branch")
     public ResponseEntity<LibraryBranchDTO> getLibraryBranchByName(@RequestParam String branchName) {
-       return libraryBranchService.getLibraryBranchByName(branchName)
-               .map(ResponseEntity::ok).
-               orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return libraryBranchService.getLibraryBranchByName(branchName)
+                .map(ResponseEntity::ok).
+                orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
 
     @GetMapping()
-    @Operation(summary = "Get all library branches", description = "Returns a list of the library branches.")
+    @Operation(summary = "Get all library branches", description = "Returns a list of the library branches")
     public List<LibraryBranchDTO> getAllLibraryBranchesDetails() {
         return libraryBranchService.getAllLibraryBranches();
     }
 
     @PostMapping
     @Operation(summary = "Create a library branch", description = "Creates a library with the given details")
-    public ResponseEntity<String> createLibraryBranch(@RequestBody CreateLibraryBranchRequest  request   ) {
+    public ResponseEntity<String> createLibraryBranch(@RequestBody CreateLibraryBranchRequest request) {
         libraryBranchService.createLibraryBranch(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Library branch created successfully.");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Library branch created successfully");
     }
 
     @PutMapping
     @Operation(summary = "Update a library", description = "Updates the information about a given library")
-    public ResponseEntity<String> updateLibraryBranch(@RequestBody LibraryBranch libraryBranch){
-        libraryBranchService.updateLibraryBranch(libraryBranch);
+    public ResponseEntity<String> updateLibraryBranch(@RequestParam Long libraryId, @RequestBody CreateLibraryBranchRequest request) {
+        libraryBranchService.updateLibraryBranch(libraryId, request);
         return ResponseEntity.ok("Library branch updated successfully.");
     }
 
     @DeleteMapping("{libraryBranchId}")
     @Operation(summary = "Delete a library", description = "Deletes a library by the given id")
-    public ResponseEntity<String> deleteLibraryBranch(@PathVariable("libraryBranchId") Long libraryBranchId){
+    public ResponseEntity<String> deleteLibraryBranch(@PathVariable("libraryBranchId") Long libraryBranchId) {
         libraryBranchService.deleteLibraryBranch(libraryBranchId);
         return ResponseEntity.ok("Library branch deleted successfully.");
     }

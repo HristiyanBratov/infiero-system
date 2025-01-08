@@ -2,6 +2,7 @@ package com.project.backend_api.services.implementation;
 
 import com.project.backend_api.dto.LibraryBranchDTO;
 import com.project.backend_api.mappers.LibraryBranchDTOMapper;
+import com.project.backend_api.models.Author;
 import com.project.backend_api.models.Book;
 import com.project.backend_api.models.LibraryBranch;
 import com.project.backend_api.repositories.BookRepository;
@@ -38,16 +39,12 @@ public class LibraryBranchServiceImpl implements LibraryBranchService {
 
     @Override
     public List<LibraryBranchDTO> getAllLibraryBranches() {
-        return libraryBranchRepository.findAll()
-                .stream()
-                .map(libraryBranchDTOMapper)
-                .collect(Collectors.toList());
+        return libraryBranchRepository.findAll().stream().map(libraryBranchDTOMapper).collect(Collectors.toList());
     }
 
     @Override
     public void createLibraryBranch(CreateLibraryBranchRequest request) {
-        Set<Book> books = bookRepository.findAllById(request.getBookIds())
-                .stream().collect(Collectors.toSet());
+        Set<Book> books = bookRepository.findAllById(request.getBookIds()).stream().collect(Collectors.toSet());
 
         if (books.isEmpty()) {
             throw new IllegalArgumentException("At least one valid book is required");
@@ -62,23 +59,45 @@ public class LibraryBranchServiceImpl implements LibraryBranchService {
         libraryBranchRepository.save(libraryBranch);
 
 
-
-
     }
 
     @Override
-    public ResponseEntity<String> updateLibraryBranch(LibraryBranch libraryBranch) {
-        if(!libraryBranchRepository.existsById(libraryBranch.getId())) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Library Branch not found for update.");
+    public ResponseEntity<String> updateLibraryBranch(Long libraryBranchId, CreateLibraryBranchRequest request) {
+        LibraryBranch libraryBranch = libraryBranchRepository.findById(libraryBranchId).orElseThrow(() -> new IllegalArgumentException("Library branch with ID " + libraryBranchId + " not found"));
+
+
+        if (request.getBranchName() != null) {
+            libraryBranch.setBranchName(request.getBranchName());
+        }
+
+        if (request.getBranchAddress() != null) {
+            libraryBranch.setBranchAddress(request.getBranchAddress());
+        }
+
+        if (request.getBranchNunber() != null) {
+            libraryBranch.setContactNumber(request.getBranchNunber());
+        }
+
+        if (request.getOpeningHours() != null) {
+            libraryBranch.setOpeningHours(request.getOpeningHours());
+        }
+
+        if (request.getBookIds() != null && !request.getBookIds().isEmpty()) {
+            Set<Book> books = bookRepository.findAllById(request.getBookIds()).stream().collect(Collectors.toSet());
+
+            if (books.isEmpty()) {
+                throw new IllegalArgumentException("At least one valid book id is required");
+            }
         }
 
         libraryBranchRepository.save(libraryBranch);
-        return ResponseEntity.ok("Library Branch updated successfully.");
+        return ResponseEntity.ok("Library branch updated");
     }
+
 
     @Override
     public ResponseEntity<String> deleteLibraryBranch(Long libraryBranchId) {
-        if(!libraryBranchRepository.existsById(libraryBranchId)) {
+        if (!libraryBranchRepository.existsById(libraryBranchId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("LibraryBranch not found to be deleted.");
         }
 

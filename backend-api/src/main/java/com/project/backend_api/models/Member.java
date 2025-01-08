@@ -3,6 +3,7 @@ package com.project.backend_api.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +21,8 @@ public class Member {
     @Column(name = "Last_Name", nullable = false)
     private String lastName;
 
-    @Column(name = "Email")
+
+    @Column(name = "Email", unique = true, nullable = false)
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -93,8 +95,8 @@ public class Member {
         this.memberStatus = memberStatus;
     }
 
-    public LocalDate getMembershipDate() {
-        return membershipDate;
+    public LocalDate getMembershipDate(Date membershipDate) {
+        return this.membershipDate;
     }
 
     public void setMembershipDate(LocalDate membershipDate) {

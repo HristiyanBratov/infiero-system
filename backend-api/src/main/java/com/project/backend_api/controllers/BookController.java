@@ -26,43 +26,40 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    //Read Specific Book Details from DB
     @GetMapping("{bookId}")
     @Operation(summary = "Searches book by id", description = "Returns a book.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "book is in the system"),
-            @ApiResponse(responseCode = "500", description = "book does not exist")})
-    public BookDTO getBookDetails(@PathVariable("bookId") Long bookId){
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "book is in the system"), @ApiResponse(responseCode = "500", description = "book does not exist")})
+    public BookDTO getBookDetails(@PathVariable("bookId") Long bookId) {
         return bookService.getBook(bookId);
     }
 
-    //Read All Books Details from DB
+
     @GetMapping()
 
-    @Operation(summary = "Get all book", description = "Returns a list of the books.")
-    public List<BookDTO> getAllBookDetails(){
+    @Operation(summary = "Get all book", description = "Returns a list of the books")
+    public List<BookDTO> getAllBookDetails() {
         return bookService.getAllBooks();
     }
 
-@PostMapping
-@Operation(summary = "Create a book", description = "Creates a book with the given details")
-public ResponseEntity<String> createBook(@RequestBody CreateBookRequest request) {
-    bookService.createBook(request);
-    return ResponseEntity.status(HttpStatus.CREATED).body("Book created successfully.");
-}
+    @PostMapping
+    @Operation(summary = "Create a book", description = "Creates a book with the given details")
+    public ResponseEntity<String> createBook(@RequestBody CreateBookRequest request) {
+        bookService.createBook(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Book created successfully");
+    }
 
 
-@PutMapping("/{bookId}")
-@Operation(summary = "Update a book", description = "Updates the information about a given book")
-public ResponseEntity<String> updateBook(@PathVariable Long bookId, @RequestBody CreateBookRequest request) {
-    bookService.updateBook(bookId, request);
-    return ResponseEntity.ok("Book updated successfully.");
-}
+    @PutMapping("/{bookId}")
+    @Operation(summary = "Update a book", description = "Updates the information about a given book")
+    public ResponseEntity<String> updateBook(@PathVariable Long bookId, @RequestBody CreateBookRequest request) {
+        bookService.updateBook(bookId, request);
+        return ResponseEntity.ok("Book updated successfully");
+    }
 
     @DeleteMapping("{bookId}")
     @Operation(summary = "Delete a book", description = "Deletes a book by the given id")
-    public ResponseEntity<String> deleteBookDetails(@PathVariable("bookId") Long bookId){
+    public ResponseEntity<String> deleteBookDetails(@PathVariable("bookId") Long bookId) {
         bookService.deleteBook(bookId);
-        return ResponseEntity.ok("Book deleted successfully.");
+        return ResponseEntity.ok("Book deleted successfully");
     }
 }

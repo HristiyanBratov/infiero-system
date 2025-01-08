@@ -36,109 +36,75 @@ public class BookServiceImpl implements BookService {
     }
 
 
-@Override
-public void createBook(CreateBookRequest request) {
-    // Fetch and validate related entities
-    Genre genre = genreRepository.findById(request.getGenreId())
-            .orElseThrow(() -> new IllegalArgumentException("Invalid genre ID"));
+    @Override
+    public void createBook(CreateBookRequest request) {
+        Genre genre = genreRepository.findById(request.getGenreId()).orElseThrow(() -> new IllegalArgumentException("Invalid genre ID"));
 
-    Set<Author> authors = authorRepository.findAllById(request.getAuthorIds())
-            .stream().collect(Collectors.toSet());
-
-    if (authors.isEmpty()) {
-        throw new IllegalArgumentException("At least one valid author is required");
-    }
-
-
-    Book book = new Book();
-    book.setTitle(request.getTitle());
-    book.setIsbn(request.getIsbn());
-    book.setPublicationDate(request.getPublicationDate());
-    book.setCopiesAvailable(request.getCopiesAvailable());
-    book.setGenre(genre);
-    book.setAuthors(authors);
-
-    // Save the Book entity
-    bookRepository.save(book);
-}
-
-//    @Override
-//    public void updateBook(Long id,  CreateBookRequest request) {
-//        Genre genre = genreRepository.findById(request.getGenreId())
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid genre ID"));
-//
-//        Set<Author> authors = authorRepository.findAllById(request.getAuthorIds())
-//                .stream().collect(Collectors.toSet());
-//
-//        if (authors.isEmpty()) {
-//            throw new IllegalArgumentException("At least one valid author is required");
-//        }
-//
-//        if(!bookRepository.existsById(id)) {
-//             throw new EntityNotFoundException("Book not found");
-//        }
-//        Book book2update = bookRepository.findById(id).get();
-//        book2update.setTitle(request.getTitle());
-//        book2update.setIsbn(request.getIsbn());
-//        book2update.setPublicationDate(request.getPublicationDate());
-//        book2update.setCopiesAvailable(request.getCopiesAvailable());
-//        book2update.setGenre(genre);
-//        book2update.setAuthors(authors);
-//
-//
-//
-//        bookRepository.save(book2update);
-//
-//    }
-@Override
-public void updateBook(Long bookId, CreateBookRequest request) {
-    // Fetch the existing Book entity
-    Book book = bookRepository.findById(bookId)
-            .orElseThrow(() -> new IllegalArgumentException("Book with ID " + bookId + " not found"));
-
-    // Update fields if provided
-    if (request.getTitle() != null) {
-        book.setTitle(request.getTitle());
-    }
-
-    if (request.getIsbn() != null) {
-        book.setIsbn(request.getIsbn());
-    }
-
-    if (request.getPublicationDate() != null) {
-        book.setPublicationDate(request.getPublicationDate());
-    }
-
-    if (request.getCopiesAvailable() != null) {
-        book.setCopiesAvailable(request.getCopiesAvailable());
-    }
-
-
-    if (request.getGenreId() != null) {
-        Genre genre = genreRepository.findById(request.getGenreId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid genre ID"));
-        book.setGenre(genre);
-    }
-
-
-    if (request.getAuthorIds() != null && !request.getAuthorIds().isEmpty()) {
-        Set<Author> authors = authorRepository.findAllById(request.getAuthorIds())
-                .stream().collect(Collectors.toSet());
+        Set<Author> authors = authorRepository.findAllById(request.getAuthorIds()).stream().collect(Collectors.toSet());
 
         if (authors.isEmpty()) {
             throw new IllegalArgumentException("At least one valid author is required");
         }
 
+
+        Book book = new Book();
+        book.setTitle(request.getTitle());
+        book.setIsbn(request.getIsbn());
+        book.setPublicationDate(request.getPublicationDate());
+        book.setCopiesAvailable(request.getCopiesAvailable());
+        book.setGenre(genre);
         book.setAuthors(authors);
+
+
+        bookRepository.save(book);
     }
 
-    // Save the updated Book entity
-    bookRepository.save(book);
-}
+
+    @Override
+    public void updateBook(Long bookId, CreateBookRequest request) {
+
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("Book with ID " + bookId + " not found"));
+
+        if (request.getTitle() != null) {
+            book.setTitle(request.getTitle());
+        }
+
+        if (request.getIsbn() != null) {
+            book.setIsbn(request.getIsbn());
+        }
+
+        if (request.getPublicationDate() != null) {
+            book.setPublicationDate(request.getPublicationDate());
+        }
+
+        if (request.getCopiesAvailable() != null) {
+            book.setCopiesAvailable(request.getCopiesAvailable());
+        }
+
+
+        if (request.getGenreId() != null) {
+            Genre genre = genreRepository.findById(request.getGenreId()).orElseThrow(() -> new IllegalArgumentException("Invalid genre ID"));
+            book.setGenre(genre);
+        }
+
+
+        if (request.getAuthorIds() != null && !request.getAuthorIds().isEmpty()) {
+            Set<Author> authors = authorRepository.findAllById(request.getAuthorIds()).stream().collect(Collectors.toSet());
+
+            if (authors.isEmpty()) {
+                throw new IllegalArgumentException("At least one valid author is required");
+            }
+
+            book.setAuthors(authors);
+        }
+
+
+        bookRepository.save(book);
+    }
 
     @Override
     public ResponseEntity<String> deleteBook(Long bookId) {
-        if(!bookRepository.existsById(bookId)) {
+        if (!bookRepository.existsById(bookId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found to be deleted.");
         }
 
@@ -148,15 +114,11 @@ public void updateBook(Long bookId, CreateBookRequest request) {
 
     @Override
     public BookDTO getBook(Long bookId) {
-        return bookRepository.findById(bookId).map(bookDTOMapper).
-                orElseThrow(() -> new EntityNotFoundException("Book with id: " + bookId + " not found."));
+        return bookRepository.findById(bookId).map(bookDTOMapper).orElseThrow(() -> new EntityNotFoundException("Book with id: " + bookId + " not found."));
     }
 
     @Override
-    public List<BookDTO> getAllBooks(){
-        return bookRepository.findAll()
-                .stream()
-                .map(bookDTOMapper)
-                .collect(Collectors.toList());
+    public List<BookDTO> getAllBooks() {
+        return bookRepository.findAll().stream().map(bookDTOMapper).collect(Collectors.toList());
     }
 }

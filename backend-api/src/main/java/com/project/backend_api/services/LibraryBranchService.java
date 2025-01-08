@@ -15,6 +15,6 @@ public interface LibraryBranchService {
     public Optional<LibraryBranchDTO> getLibraryBranchByName(String branchName);
     public List<LibraryBranchDTO> getAllLibraryBranches();
     public void createLibraryBranch(CreateLibraryBranchRequest request);
-    public ResponseEntity<String> updateLibraryBranch(LibraryBranch libraryBranch);
+    public ResponseEntity<String> updateLibraryBranch(Long libraryBranchId, CreateLibraryBranchRequest request);
     public ResponseEntity<String> deleteLibraryBranch(Long libraryBranchId);
 }
