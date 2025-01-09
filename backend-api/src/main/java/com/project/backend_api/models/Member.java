@@ -34,7 +34,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private Set<BookLoan> bookLoans;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
     private Set<Reservation> reservations;
 
     @OneToMany(mappedBy = "member")

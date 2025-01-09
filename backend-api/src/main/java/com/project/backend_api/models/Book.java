@@ -29,7 +29,7 @@ public class Book
 
     private Integer copiesAvailable;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
 

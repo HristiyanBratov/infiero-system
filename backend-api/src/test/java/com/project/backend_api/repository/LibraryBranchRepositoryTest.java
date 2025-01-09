@@ -1,9 +1,7 @@
 package com.project.backend_api.repository;
 
 
-import com.project.backend_api.models.Book;
 import com.project.backend_api.models.LibraryBranch;
-import com.project.backend_api.repositories.BookRepository;
 import com.project.backend_api.repositories.LibraryBranchRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +19,6 @@ public class LibraryBranchRepositoryTest {
     private LibraryBranchRepository libraryBranchRepository;
     private LibraryBranch libraryBranch;
 
-    //Optional<LibraryBranch> findByBranchName(String branchName);
     @BeforeEach
     public void setUp() {
         libraryBranch = new LibraryBranch("Sofia_Branch", "Sofia", "0884543231", "10AM:18PM");
